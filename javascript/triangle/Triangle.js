@@ -32,9 +32,6 @@ class Triangle {
 		// Sort the sides and then just check the smallest ones.
 		let triangleInequality = (this.x + this.y >= this.z);
 
-		console.log(this.x);
-		console.log(triangleInequality);
-
 		return noSidesLessEqual0 && triangleInequality;
 	}
 }
