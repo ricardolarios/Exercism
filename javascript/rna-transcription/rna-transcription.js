@@ -2,29 +2,24 @@ class Transcriptor {
 
 	// Transcribes given DNA strand to RNA
 	toRna(dna) {
-		const dnaArray = dna.split('');
-		let result = [];
+		let dnaArray = dna.split('');
 
-		dnaArray.forEach(nucleo => {
+		dnaArray = dnaArray.map(nucleo => {
 			switch(nucleo) {
 				case 'G':
-					result.push('C');
-					break;
+					return 'C';
 				case 'C':
-					result.push('G');
-					break;
+					return 'G';
 				case 'T':
-					result.push('A');
-					break;
+					return 'A';
 				case 'A':
-					result.push('U');
-					break;
+					return 'U';
 				default:
 					throw new Error('Invalid input DNA.')
 			}
 		})
 
-		return result.join('');
+		return dnaArray.join('');
 	}
 }
 
