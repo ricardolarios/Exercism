@@ -30,17 +30,16 @@ function decode(encoded) {
 	let result = '';
 	let given = encoded.replace(/ /g, '_');
 	while (given !== '') {
-		console.log("Given before: " + '\'' + given + '\'');
 
 		let parsed = parseInt(given);
 		if (isNaN(parsed)) {
 			parsed = 1;
-			console.log('got here');
 		}
 		else {
 			var length = parsed.toString().length;
 			given = given.substring(length)
 		}
+		
 		let currentChar = given.charAt(0);
 		if (currentChar === '_') {
 			currentChar = ' ';

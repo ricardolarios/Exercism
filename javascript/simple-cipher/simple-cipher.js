@@ -1,8 +1,6 @@
-const alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
+const alphabet = 'abcdefghijklmnopqrstuvwxyz'.split('');
 
-const ALPHABET_MAP = {'a': 0, 'b': 1, 'c': 2, 'd': 3, 'e': 4, 'f': 5, 'g': 6, 'h': 7, 'i': 8, 'j': 9, 
-	'k': 10, 'l': 11, 'm': 12, 'n': 13, 'o': 14, 'p': 15, 'q': 16, 'r': 17, 's': 18, 
-	't': 19, 'u': 20, 'v': 21, 'w': 22, 'x': 23, 'y': 24, 'z': 25 };
+const alphabetMap = new Map(alphabet.map((char, index) => [char, index]));
 
 class Cipher {
 	constructor(key = undefined) {
@@ -14,74 +12,70 @@ class Cipher {
 			throw new Error('Bad key');
 		}
 	}
-}
 
-Cipher.prototype.generateKey = function() {
-	var result = "";
-	let i = 100;
-	let randomNum = () => { return Math.floor(Math.random() * 26) };
-	while(i >= 0) {
-		result += alphabet[randomNum()]
+	generateKey() {
+		var result = "";
+		let i = 100;
+		let randomNum = () => { return Math.floor(Math.random() * 26) };
+		while(i >= 0) {
+			result += alphabet[randomNum()]
 
-		i--;
+			i--;
+		}
+		return result;
 	}
 
-	return result;
-}
+	isValidKey(key) {
+		let hasNumbers = /\d/.test(key);
+		let hasCaps = /[A-Z]/.test(key);
+		let isEmpty = key === '';
 
-Cipher.prototype.isValidKey = function(key) {
-	let hasNumbers = /\d/.test(key);
-	let hasCaps = /[A-Z]/.test(key);
-	let isEmpty = key === '';
+		return !(hasNumbers || hasCaps || isEmpty);
+	}
 
-	return !(hasNumbers || hasCaps || isEmpty);
-}
+	// Encodes the given string according to this cipher's key.
+	encode(given) {
+		return this.translate(given, 'encode');
+	}
 
-// Encodes the given string according to this cipher's key.
-Cipher.prototype.encode = function(given) {
-	return this.translate(given, 'encode');
-}
+	// Decodes the given string according to this cipher's key.
+	decode(given) {
+		return this.translate(given, 'decode');
+	}
 
-// Decodes the given string according to this cipher's key.
-Cipher.prototype.decode = function(given) {
-	return this.translate(given, 'decode');
-}
+	translate(given, operation) {
+		let givenLength = given.length;
+		let result = '';
 
+		let currentGiven = 0;
+		let currentKey = 0;
 
-Cipher.prototype.translate = function(given, operation) {
-	let givenLength = given.length;
-	let result = '';
+		while (currentGiven < givenLength) {
 
-	let currentGiven = 0;
-	let currentKey = 0;
+			let currentGivenLetter = alphabetMap.get(given.charAt(currentGiven));
+			let currentKeyLetter = alphabetMap.get(this.key.charAt(currentKey));
 
-	while (currentGiven < givenLength) {
-
-		let currentGivenLetter = ALPHABET_MAP[given.charAt(currentGiven)];
-		let currentKeyLetter = ALPHABET_MAP[this.key.charAt(currentKey)];
-
-		// This is where it checks how to calculate 
-		if (operation === 'decode') {
-			var cipher = (currentGivenLetter - currentKeyLetter);
-			if (cipher < 0) {
-				cipher += 26;
+			// This is where it checks how to calculate 
+			if (operation === 'decode') {
+				var cipher = (currentGivenLetter - currentKeyLetter);
+				if (cipher < 0) {
+					cipher += 26;
+				}
 			}
-		}
-		else if (operation === 'encode') {
-			var cipher = (currentKeyLetter + currentGivenLetter) % 26;
-		}
-		else {
-			throw new Error('Not a valid operation');
+			else if (operation === 'encode') {
+				var cipher = (currentKeyLetter + currentGivenLetter) % 26;
+			}
+			else {
+				throw new Error('Not a valid operation');
+			}
+
+			result += alphabet[cipher];
+			currentGiven++;
+			currentKey = (currentKey + 1) % this.keyLength;
 		}
 
-		result += alphabet[cipher];
-
-
-		currentGiven++;
-		currentKey = (currentKey + 1) % this.keyLength;
+		return result;
 	}
-
-	return result;
 }
 
 export default Cipher;
