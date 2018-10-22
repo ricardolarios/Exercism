@@ -9,16 +9,15 @@ class Series {
 		if (len > this.length) {
 			throw new Error('Slice size is too big.');
 		}
-		else if (len <= this.length) {
-			let i = 0;
-			let result = [];
-			while (i + len <= this.length) {
-				result.push(this.digits.slice(i, i + len))
-				i += 1;
-			}
 
-			return result;
+		let i = 0;
+		let result = [];
+		while (i + len <= this.length) {
+			result.push(this.digits.slice(i, i + len))
+			i += 1;
 		}
+
+		return result;
 	}
 }
 
