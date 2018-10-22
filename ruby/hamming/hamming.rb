@@ -2,15 +2,9 @@ class Hamming
 	def self.compute(first, second)
 		raise ArgumentError if first.length != second.length
 
-		length = first.length 
-		i = 0
-		result = 0
+		first_arr = first.chars
+		second_arr = second.chars
 
-		while i < length
-			result = result + 1 if first[i] != second[i]
-			i = i + 1
-		end
-
-		result
+		(0..first.length - 1).count { |i| first_arr[i] != second_arr[i] }
 	end
 end
