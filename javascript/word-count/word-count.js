@@ -1,6 +1,9 @@
 export default class Words {
 	count(given) {
-		return given.toLowerCase().split(/[\s|\n|]+/);
+		const addToMap = function() => {
+			
+		}
+		return given.toLowerCase().split(/[\s|\n|]+/).forEach();
 	}
 }
 
